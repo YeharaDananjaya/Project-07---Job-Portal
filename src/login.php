@@ -27,9 +27,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         if ($result && $result->num_rows === 1) {
             $user = $result->fetch_assoc();
             
-            // Check user type
+            // Check user type and password verification
             if ($user['type'] == 1) { // Admin login
-                // Admin password is stored in plain text, so verify directly
+                // Directly compare the password as admin password is stored in plain text
                 if ($password === $user['password']) {
                     // Successful login for admin
                     $_SESSION['email'] = $user['email'];
@@ -40,7 +40,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     $error = "Invalid email or password";
                 }
             } else { // Customer login
-                // For customers, password is hashed, so use password_verify
+                // For customers, use password_verify for hashed passwords
                 if (password_verify($password, $user['password'])) {
                     // Successful login for customer
                     $_SESSION['email'] = $user['email'];
