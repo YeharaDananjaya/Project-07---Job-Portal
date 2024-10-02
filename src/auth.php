@@ -1,7 +1,7 @@
 <?php
 try
 {
-$pdo=new PDO('mysql:host=localhost;dbname=wt','root','');
+$pdo=new PDO('mysql:host=localhost;dbname=online_job_portal','root','');
 //the above code connects php to my sql database
 }
 catch(PDOException $e)

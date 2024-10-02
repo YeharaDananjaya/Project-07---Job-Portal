@@ -10,15 +10,25 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     // Sanitize and validate inputs
     $name = filter_input(INPUT_POST, 'name', FILTER_SANITIZE_STRING);
     $email = filter_input(INPUT_POST, 'email', FILTER_SANITIZE_EMAIL);
-    $gender = filter_input(INPUT_POST, 'gender', FILTER_SANITIZE_STRING);
+    $phone_number = filter_input(INPUT_POST, 'phone_number', FILTER_SANITIZE_STRING);
     $password = $_POST['password'];
     $confirm_password = $_POST['confirm_password'];
 
+    // Initialize error array
+    $errors = [];
+
+    // Validate email format
+    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        $errors[] = "Invalid email format.";
+    }
+
     // Check if password and confirm password match
     if ($password !== $confirm_password) {
-        $error = "Passwords do not match.";
-    } else {
-        // Check if email already exists
+        $errors[] = "Passwords do not match.";
+    }
+
+    // If no errors, proceed to check email existence
+    if (empty($errors)) {
         $checkQuery = "SELECT * FROM users WHERE email = ?";
         $stmt = $con->prepare($checkQuery);
         $stmt->bind_param("s", $email);
@@ -26,13 +36,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $result = $stmt->get_result();
 
         if ($result->num_rows > 0) {
-            $error = "Email already exists.";
+            $errors[] = "Email already exists.";
         } else {
             // Insert new user into the database
             $hashed_password = password_hash($password, PASSWORD_DEFAULT); // Use password_hash for better security
-            $query = "INSERT INTO users (name, email, gender, password, type) VALUES (?, ?, ?, ?, 0)";
+            $query = "INSERT INTO users (name, email, phone_number, password, type) VALUES (?, ?, ?, ?, 0)";
             $stmt = $con->prepare($query);
-            $stmt->bind_param("ssss", $name, $email, $gender, $hashed_password);
+            $stmt->bind_param("ssss", $name, $email, $phone_number, $hashed_password);
 
             if ($stmt->execute()) {
                 // Registration successful
@@ -43,7 +53,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                           </div>";
                 exit();
             } else {
-                $error = "Registration failed. Please try again.";
+                $errors[] = "Registration failed. Please try again.";
             }
         }
     }
@@ -115,7 +125,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         <div class="container">
             <form class="form" method="post" onsubmit="return validateForm()">
                 <h1 class="login-title">Sign Up</h1>
-                <?php if (isset($error)) { echo "<p class='error'>$error</p>"; } ?>
+                <?php if (!empty($errors)) { 
+                    foreach ($errors as $error) {
+                        echo "<p class='error'>$error</p>"; 
+                    }
+                } ?>
                 
                 <div class="input-group">
                     <input type="text" class="login-input" name="name" placeholder="Name" required />
@@ -129,15 +143,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 </div>
                 
                 <div class="input-group">
-                    <label>Gender:</label>
-                    <div>
-                        <label>
-                            <input type="radio" name="gender" value="Male" required> Male
-                        </label>
-                        <label>
-                            <input type="radio" name="gender" value="Female"> Female
-                        </label>
-                    </div>
+                    <input type="text" class="login-input" name="phone_number" placeholder="Phone Number" required />
+                    <i class="fas fa-phone"></i>
                 </div>
 
                 <div class="input-group">

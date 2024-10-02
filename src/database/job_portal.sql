@@ -1,6 +1,9 @@
 -- phpMyAdmin SQL Dump
 -- version 5.2.1
+-- https://www.phpmyadmin.net/
+--
 -- Host: 127.0.0.1
+-- Generation Time: Oct 02, 2024 at 06:06 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -13,8 +16,17 @@ SET time_zone = "+00:00";
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
 /*!40101 SET NAMES utf8mb4 */;
 
+--
+
+-- Database: `online_job_portal`
+--
+
 -- --------------------------------------------------------
+
+--
 -- Table structure for table `users`
+--
+
 CREATE TABLE `users` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(100) NOT NULL,
@@ -27,9 +39,20 @@ CREATE TABLE `users` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+--
+-- Dumping data for table `users`
+--
+
+INSERT INTO `users` (`name`, `email`, `password`, `phone_number`, `type`) VALUES
+('John Doe', 'john.doe@example.com', 'hashedpassword1', '1234567890', 0),
+('Jane Smith', 'jane.smith@example.com', 'hashedpassword2', '0987654321', 1);
 
 -- --------------------------------------------------------
+
+--
 -- Table structure for table `companies`
+--
+
 CREATE TABLE `companies` (
   `company_id` int(11) NOT NULL AUTO_INCREMENT,
   `company_name` varchar(255) NOT NULL,
@@ -41,8 +64,20 @@ CREATE TABLE `companies` (
   PRIMARY KEY (`company_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+--
+-- Dumping data for table `companies`
+--
+
+INSERT INTO `companies` (`company_name`, `email`, `address`, `contact_number`) VALUES
+('Tech Corp', 'contact@techcorp.com', '1234 Tech Street, Tech City', '1234567890'),
+('Innovative Solutions', 'info@innovativesol.com', '5678 Innovation Lane, Tech Valley', '0987654321');
+
 -- --------------------------------------------------------
+
+--
 -- Table structure for table `jobs`
+--
+
 CREATE TABLE `jobs` (
   `job_id` int(11) NOT NULL AUTO_INCREMENT,
   `company_id` int(11) NOT NULL,
@@ -55,8 +90,20 @@ CREATE TABLE `jobs` (
   FOREIGN KEY (`company_id`) REFERENCES `companies`(`company_id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+--
+-- Dumping data for table `jobs`
+--
+
+INSERT INTO `jobs` (`company_id`, `job_title`, `description`, `location`, `salary`) VALUES
+(1, 'Software Engineer', 'Develop and maintain software applications.', 'Tech City', 75000.00),
+(2, 'Data Analyst', 'Analyze data trends and generate reports.', 'Tech Valley', 65000.00);
+
 -- --------------------------------------------------------
+
+--
 -- Table structure for table `applications`
+--
+
 CREATE TABLE `applications` (
   `application_id` INT(11) NOT NULL AUTO_INCREMENT COMMENT 'Unique ID for each application',
   `user_id` INT(11) NOT NULL COMMENT 'ID of the user applying for the job, references users table',
@@ -69,10 +116,22 @@ CREATE TABLE `applications` (
   CONSTRAINT `fk_job_id` FOREIGN KEY (`job_id`) REFERENCES `jobs`(`job_id`) ON DELETE CASCADE ON UPDATE CASCADE,
   INDEX `idx_user_id` (`user_id`),
   INDEX `idx_job_id` (`job_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='Table storing job applications submitted by users';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `applications`
+--
+
+INSERT INTO `applications` (`user_id`, `job_id`, `cover_letter`, `status`) VALUES
+(1, 1, 'I am excited to apply for the Software Engineer position...', 'pending'),
+(2, 2, 'I would like to be considered for the Data Analyst role...', 'pending');
 
 -- --------------------------------------------------------
+
+--
 -- Table structure for table `feedbacks`
+--
+
 CREATE TABLE `feedbacks` (
   `feedback_id` int(11) NOT NULL AUTO_INCREMENT,
   `user_id` int(11) NOT NULL,
@@ -85,59 +144,14 @@ CREATE TABLE `feedbacks` (
   FOREIGN KEY (`company_id`) REFERENCES `companies`(`company_id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+--
+-- Dumping data for table `feedbacks`
+--
+
+INSERT INTO `feedbacks` (`user_id`, `company_id`, `rating`, `comments`) VALUES
+(1, 1, 5, 'Excellent company to work with!'),
+(2, 2, 4, 'Great experience, but there is room for improvement.');
+
 -- --------------------------------------------------------
--- Indexes for all tables
-ALTER TABLE `users`
-  ADD UNIQUE KEY `email` (`email`);
-
-ALTER TABLE `companies`
-  ADD UNIQUE KEY `email` (`email`);
-
--- --------------------------------------------------------
--- AUTO_INCREMENT for all tables
-ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;
-
-ALTER TABLE `companies`
-  MODIFY `company_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;
-
-ALTER TABLE `jobs`
-  MODIFY `job_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;
-
-ALTER TABLE `applications`
-  MODIFY `application_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;
-
-ALTER TABLE `feedbacks`
-  MODIFY `feedback_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;
 
 COMMIT;
-
--- Insert data into users table
-INSERT INTO `users` (`name`, `email`, `password`, `phone_number`, `type`) 
-VALUES 
-('John Doe', 'john.doe@example.com', 'hashedpassword1', '1234567890', 0), 
-('Jane Smith', 'jane.smith@example.com', 'hashedpassword2', '0987654321', 1);
-
--- Insert data into companies table
-INSERT INTO `companies` (`company_name`, `email`, `address`, `contact_number`) 
-VALUES 
-('Tech Corp', 'contact@techcorp.com', '1234 Tech Street, Tech City', '1234567890'), 
-('Innovative Solutions', 'info@innovativesol.com', '5678 Innovation Lane, Tech Valley', '0987654321');
-
--- Insert data into jobs table
-INSERT INTO `jobs` (`company_id`, `job_title`, `description`, `location`, `salary`) 
-VALUES 
-(1, 'Software Engineer', 'Develop and maintain software applications.', 'Tech City', 75000.00), 
-(2, 'Data Analyst', 'Analyze data trends and generate reports.', 'Tech Valley', 65000.00);
-
--- Insert data into applications table
-INSERT INTO `applications` (`user_id`, `job_id`, `cover_letter`, `status`) 
-VALUES 
-(1, 1, 'I am excited to apply for the Software Engineer position...', 'pending'), 
-(2, 2, 'I would like to be considered for the Data Analyst role...', 'pending');
-
--- Insert data into feedbacks table
-INSERT INTO `feedbacks` (`user_id`, `company_id`, `rating`, `comments`) 
-VALUES 
-(1, 1, 5, 'Excellent company to work with!'), 
-(2, 2, 4, 'Great experience, but there is room for improvement.');
