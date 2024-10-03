@@ -1,12 +1,25 @@
 <?php
 // Include database connection
 include('db.php');
+// Start the session
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 
 // Include the navigation bar
 include('navbar.php');
 
 // Initialize variables
 $message = '';
+
+// Check if the user is logged in
+if (!isset($_SESSION['email'])) {
+    echo "You need to be logged in to manage feedback.";
+    exit; // Stop the script if not logged in
+}
+
+// Get the logged-in user's email
+$user_email = $_SESSION['email'];
 
 // Handle delete request
 if (isset($_GET['action']) && $_GET['action'] == 'delete' && isset($_GET['id'])) {
@@ -40,7 +53,8 @@ $sql = "SELECT f.feedback_id, u.name AS username, c.company_name, j.job_title, f
         FROM feedbacks f
         JOIN users u ON f.user_id = u.id
         JOIN companies c ON f.company_id = c.company_id
-        JOIN jobs j ON f.job_id = j.job_id";  // Join with jobs table
+        JOIN jobs j ON f.job_id = j.job_id
+        WHERE u.email = '$user_email'";  // Filter by logged-in user's email
 
 $result = mysqli_query($con, $sql);
 
@@ -206,64 +220,54 @@ if (!$result) {
                     <input type="text" id="job" name="job" style="width: 100%; padding: 8px; margin-top: 5px; border: 1px solid #ccc; border-radius: 4px;" required readonly>
                 </div>
                 <div style="margin-bottom: 15px;">
-    <label for="rating" style="font-weight: bold;">Rating:</label>
-    <select id="rating" name="rating" style="width: 100%; padding: 8px; margin-top: 5px; border: 1px solid #ccc; border-radius: 4px;" required>
-        <option value="1">1 - Poor</option>
-        <option value="2">2 - Fair</option>
-        <option value="3">3 - Good</option>
-        <option value="4">4 - Very Good</option>
-        <option value="5">5 - Excellent</option>
-    </select>
-</div>
-
+                    <label for="rating" style="font-weight: bold;">Rating:</label>
+                    <select id="rating" name="rating" required>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                    </select>
+                </div>
                 <div style="margin-bottom: 15px;">
                     <label for="comments" style="font-weight: bold;">Comments:</label>
                     <textarea id="comments" name="comments" rows="4" style="width: 100%; padding: 8px; margin-top: 5px; border: 1px solid #ccc; border-radius: 4px;" required></textarea>
                 </div>
-                <button type="submit" style="background-color: #007bff; color: white; padding: 10px 20px; border: none; border-radius: 4px; cursor: pointer;">Save Changes</button>
+                <button type="submit" style="padding: 10px 15px; background-color: #007bff; color: white; border: none; border-radius: 4px;">Update Feedback</button>
             </form>
         </div>
     </div>
 
     <script>
-        // Get modal elements
-        const modal = document.getElementById('myModal');
-        const closeModalBtn = document.getElementById('closeModal');
-        const editForm = document.getElementById('editForm');
-        const editBtns = document.querySelectorAll('.editBtn');
+        // Get modal element
+        var modal = document.getElementById("myModal");
+        var closeModal = document.getElementById("closeModal");
 
-        // Open modal and populate form with feedback data
-        editBtns.forEach(btn => {
-            btn.addEventListener('click', function() {
-                const feedbackId = this.getAttribute('data-id');
-                const username = this.getAttribute('data-username');
-                const company = this.getAttribute('data-company');
-                const job = this.getAttribute('data-job');
-                const rating = this.getAttribute('data-rating');
-                const comment = this.getAttribute('data-comment');
-                
-                document.getElementById('feedback_id').value = feedbackId;
-                document.getElementById('username').value = username;
-                document.getElementById('company').value = company;
-                document.getElementById('job').value = job;
-                document.getElementById('rating').value = rating;
-                document.getElementById('comments').value = comment;
-                
-                modal.style.display = 'block';
-            });
+        // Show modal when edit button is clicked
+        document.querySelectorAll('.editBtn').forEach(function(button) {
+            button.onclick = function() {
+                document.getElementById('feedback_id').value = this.getAttribute('data-id');
+                document.getElementById('username').value = this.getAttribute('data-username');
+                document.getElementById('company').value = this.getAttribute('data-company');
+                document.getElementById('job').value = this.getAttribute('data-job');
+                document.getElementById('rating').value = this.getAttribute('data-rating');
+                document.getElementById('comments').value = this.getAttribute('data-comment');
+
+                modal.style.display = "block";
+            };
         });
 
-        // Close modal
-        closeModalBtn.addEventListener('click', function() {
-            modal.style.display = 'none';
-        });
+        // Close modal when the close button is clicked
+        closeModal.onclick = function() {
+            modal.style.display = "none";
+        };
 
-        // Close modal when clicking outside of the modal content
-        window.addEventListener('click', function(event) {
+        // Close modal when clicking outside of the modal
+        window.onclick = function(event) {
             if (event.target == modal) {
-                modal.style.display = 'none';
+                modal.style.display = "none";
             }
-        });
+        };
     </script>
 </body>
 </html>
