@@ -116,6 +116,7 @@ if (!isset($_SESSION['email'])) {
         <ul class="sidebar-menu">
             <li><a href="addJob.php">Add a Job</a></li>
             <li><a href="viewJobs.php">View Jobs</a></li>
+            <li><a href="admin_applications.php">View Applications</a></li>
             <li><a href="addCompany.php">Add a Company</a></li>
             <li><a href="viewCompanies.php">View Companies</a></li>
             <li>

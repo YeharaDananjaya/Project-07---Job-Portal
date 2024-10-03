@@ -144,10 +144,10 @@ if (!$companyResult) {
                 <select id="rating" name="rating" required>
                     <option value="" disabled selected>Select Rating</option>
                     <option value="1">1 - Poor</option>
-                    <option value="2">2 - Below Average</option>
-                    <option value="3">3 - Average</option>
-                    <option value="4">4 - Above Average</option>
-                    <option value="5">5 - Excellent</option>
+        <option value="2">2 - Fair</option>
+        <option value="3">3 - Good</option>
+        <option value="4">4 - Very Good</option>
+        <option value="5">5 - Excellent</option>
                 </select>
             </div>
 

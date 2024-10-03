@@ -22,31 +22,31 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     // Check file size
     if ($_FILES["resume_file"]["size"] > 500000) {
-        echo "<div class='alert alert-danger'>Sorry, your file is too large.</div>";
+        echo "<div class='alert danger'>Sorry, your file is too large.</div>";
         $uploadOk = 0;
     }
 
     // Allow certain file formats
     if ($fileType != "pdf" && $fileType != "doc" && $fileType != "docx") {
-        echo "<div class='alert alert-danger'>Sorry, only PDF, DOC & DOCX files are allowed.</div>";
+        echo "<div class='alert danger'>Sorry, only PDF, DOC & DOCX files are allowed.</div>";
         $uploadOk = 0;
     }
 
     // Check if $uploadOk is set to 0 by an error
     if ($uploadOk == 0) {
-        echo "<div class='alert alert-danger'>Sorry, your file was not uploaded.</div>";
+        echo "<div class='alert danger'>Sorry, your file was not uploaded.</div>";
     } else {
         // If everything is ok, try to upload file
         if (move_uploaded_file($_FILES["resume_file"]["tmp_name"], $target_file)) {
             // Insert application data into the database
             $query = "INSERT INTO applications (user_id, job_id, company_id, cover_letter, resume_file, status) VALUES ('$user_id', '$job_id', '$company_id', '$cover_letter', '$target_file', '$status')";
             if (mysqli_query($con, $query)) {
-                echo "<div class='alert alert-success'>Application submitted successfully.</div>";
+                echo "<div class='alert success'>Application submitted successfully.</div>";
             } else {
-                echo "<div class='alert alert-danger'>Error: " . mysqli_error($con) . "</div>";
+                echo "<div class='alert danger'>Error: " . mysqli_error($con) . "</div>";
             }
         } else {
-            echo "<div class='alert alert-danger'>Sorry, there was an error uploading your file.</div>";
+            echo "<div class='alert danger'>Sorry, there was an error uploading your file.</div>";
         }
     }
 }
@@ -64,101 +64,142 @@ mysqli_close($con);
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Job Application Form</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.6.0/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script>
-        $(document).ready(function() {
-            $('#company').change(function() {
-                var company_id = $(this).val();
-                if (company_id) {
-                    $.ajax({
-                        type: 'POST',
-                        url: 'fetch_jobs.php', // URL to the script that fetches jobs
-                        data: {company_id: company_id},
-                        success: function(response) {
-                            $('#job').html(response);
-                        }
-                    });
-                } else {
-                    $('#job').html('<option value="">Select a job</option>');
-                }
-            });
-        });
-    </script>
     <style>
         body {
             background-color: #f8f9fa;
             font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
         }
+
         .container {
-            background: #ffffff;
+            background: white;
             border-radius: 8px;
             padding: 20px;
+            max-width: 600px;
+            margin: 50px auto;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            animation: fadeIn 1s;
         }
+
         h2 {
             color: #343a40;
+            text-align: center;
             margin-bottom: 20px;
         }
-        .form-control:focus {
-            border-color: #007bff;
-            box-shadow: 0 0 0.2rem rgba(0,123,255,.25);
+
+        label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 8px;
         }
-        .btn-primary {
+
+        select, input[type="file"], textarea {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+            box-sizing: border-box;
+            font-size: 16px;
+        }
+
+        select:focus, input:focus, textarea:focus {
+            border-color: #007bff;
+            outline: none;
+        }
+
+        button {
             background-color: #007bff;
-            border-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            width: 100%;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
         }
-        .btn-primary:hover {
+
+        button:hover {
             background-color: #0056b3;
-            border-color: #0056b3;
         }
+
         .alert {
-            margin-top: 20px;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 4px;
+        }
+
+        .alert.success {
+            background-color: #d4edda;
+            color: #155724;
+        }
+
+        .alert.danger {
+            background-color: #f8d7da;
+            color: #721c24;
         }
     </style>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            document.getElementById('company').addEventListener('change', function () {
+                var company_id = this.value;
+                if (company_id) {
+                    var xhr = new XMLHttpRequest();
+                    xhr.open('POST', 'fetch_jobs.php', true);
+                    xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+                    xhr.onload = function () {
+                        if (this.status === 200) {
+                            document.getElementById('job').innerHTML = this.responseText;
+                        }
+                    };
+                    xhr.send('company_id=' + company_id);
+                } else {
+                    document.getElementById('job').innerHTML = '<option value="">Select a job</option>';
+                }
+            });
+        });
+    </script>
 </head>
 <body>
-    <div class="container mt-5">
-        <h2 class="text-center">Job Application Form</h2>
-        <form action="" method="POST" enctype="multipart/form-data">
-            <div class="form-group">
-                <label for="company">Select Company:</label>
-                <select id="company" name="company_id" class="form-control" required>
-                    <option value="">Select a company</option>
-                    <?php while ($row = mysqli_fetch_assoc($companies)) {
-                        echo "<option value='{$row['company_id']}'>{$row['company_name']}</option>";
-                    } ?>
-                </select>
-            </div>
 
-            <div class="form-group">
-                <label for="job">Select Job:</label>
-                <select id="job" name="job_id" class="form-control" required>
-                    <option value="">Select a job</option>
-                </select>
-            </div>
+<div class="container">
+    <h2>Job Application Form</h2>
+    <form action="" method="POST" enctype="multipart/form-data">
+        <div>
+            <label for="company">Select Company:</label>
+            <select id="company" name="company_id" required>
+                <option value="">Select a company</option>
+                <?php while ($row = mysqli_fetch_assoc($companies)) {
+                    echo "<option value='{$row['company_id']}'>{$row['company_name']}</option>";
+                } ?>
+            </select>
+        </div>
 
-            <div class="form-group">
-                <label for="cover_letter">Cover Letter:</label>
-                <textarea id="cover_letter" name="cover_letter" class="form-control" rows="5" required></textarea>
-            </div>
+        <div>
+            <label for="job">Select Job:</label>
+            <select id="job" name="job_id" required>
+                <option value="">Select a job</option>
+            </select>
+        </div>
 
-            <div class="form-group">
-                <label for="resume">Upload Resume:</label>
-                <input type="file" id="resume" name="resume_file" class="form-control-file" required>
-                <small class="form-text text-muted">Allowed formats: PDF, DOC, DOCX (max size: 500KB)</small>
-            </div>
+        <div>
+            <label for="cover_letter">Cover Letter:</label>
+            <textarea id="cover_letter" name="cover_letter" rows="5" required></textarea>
+        </div>
 
-            <button type="submit" class="btn btn-primary btn-block">Submit Application</button>
-        </form>
-    </div>
-    <?php
+        <div>
+            <label for="resume">Upload Resume:</label>
+            <input type="file" id="resume" name="resume_file" required>
+            <small>Allowed formats: PDF, DOC, DOCX (max size: 500KB)</small>
+        </div>
+
+        <button type="submit">Submit Application</button>
+    </form>
+</div>
+<?php
     // Include the footer
     include('footer.php');
     ?>
+
 </body>
 </html>
