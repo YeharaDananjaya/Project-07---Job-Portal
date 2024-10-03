@@ -185,13 +185,10 @@ nav a:hover {
                 <li><a href="home.php">Home</a></li>
                 <li><a href="job_listings.php">Job Listings</a></li>
                 <li><a href="applications.php">Applications</a></li>
-                <li><a href="manageFeedbacks.php"> Feedbakcs</a></li>
+                <li><a href="manageFeedbacks.php"> Feedbacks</a></li>
                 <li><a href="about_us.php">About Us</a></li>
             </ul>
-            <div class="search-bar">
-                <input type="text" placeholder="Search jobs...">
-                <button>Search</button>
-            </div>
+           
             <div class="dropdown">
                 <img src="images\profile-icon.png" alt="Profile" class="profile-pic" onclick="toggleProfileDropdown()"> <!-- Replace with dynamic image -->
                 <div class="dropdown-content">
