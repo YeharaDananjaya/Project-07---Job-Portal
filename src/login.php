@@ -29,7 +29,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             
             // Check user type and password verification
             if ($user['type'] == 1) { // Admin login
-                // Directly compare the password as admin password is stored in plain text
                 if ($password === $user['password']) {
                     // Successful login for admin
                     $_SESSION['email'] = $user['email'];
@@ -40,7 +39,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     $error = "Invalid email or password";
                 }
             } else { // Customer login
-                // For customers, use password_verify for hashed passwords
                 if (password_verify($password, $user['password'])) {
                     // Successful login for customer
                     $_SESSION['email'] = $user['email'];
@@ -74,52 +72,202 @@ if (isset($con)) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fitness Master - Login</title>
-    <link rel="stylesheet" type="text/css" href="styles/loginstyle.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400&family=Montserrat:wght@700&family=Open+Sans:wght@400&display=swap" rel="stylesheet">
+    <title>Job Portal - Login</title>
+    <style>
+        body {
+            background-color: #F5F7FA;
+            font-family: 'Open Sans', sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #2c3e50;
+            padding: 20px;
+            color: white;
+        }
+
+        header .logo {
+            font-size: 24px;
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            margin: 0;
+            padding: 0;
+        }
+
+        nav ul li {
+            margin: 0 15px;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            transition: color 0.3s;
+            padding: 10px 20px;
+            border-radius: 5px;
+            border: 2px solid transparent;
+        }
+
+        nav a:hover {
+            color: #e74c3c;
+            border: 2px solid #e74c3c;
+        }
+
+        #page-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: calc(100vh - 80px); /* Adjust height based on header */
+        }
+
+        .container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            max-width: 400px;
+            width: 100%;
+        }
+
+        .login-title {
+            text-align: center;
+            color: #34495e; /* Dark blue color */
+            margin-bottom: 20px;
+        }
+
+        .error {
+            color: #e74c3c;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .input-wrapper {
+            position: relative;
+            margin-bottom: 20px;
+        }
+
+        .login-input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            transition: border-color 0.3s;
+        }
+
+        .login-input:focus {
+            border-color: #e74c3c;
+            outline: none;
+        }
+
+        .login-button {
+            background-color: #2c3e50; /* Dark color */
+            color: white;
+            border: none;
+            padding: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.2s;
+            width: 100%;
+        }
+
+        .login-button:hover {
+            background-color: #34495e; /* Lighter dark color */
+            transform: scale(1.05);
+        }
+
+        .forgot-password {
+            text-align: center;
+            margin-top: 10px;
+        }
+
+        .forgot-password a {
+            color: #2c3e50; /* Dark color */
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .forgot-password a:hover {
+            text-decoration: underline;
+        }
+
+        footer {
+            background-color: #2c3e50; /* Dark background */
+            color: white;
+            text-align: center;
+            padding: 20px;
+        }
+
+        footer ul {
+            list-style: none;
+            display: flex;
+            justify-content: center;
+            padding: 0;
+        }
+
+        footer ul li {
+            margin: 0 10px;
+        }
+
+        footer a {
+            color: white;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        footer a:hover {
+            color: #e74c3c; /* Hover color */
+        }
+    </style>
+    
 </head>
 <body>
 <header>
-    <div class="logo">
-        <a href="#">Fitness Master</a>
-    </div>
+<div class="logo">Job Portal</div>
     <nav>
         <ul>
             <li><a href="register.php">Sign Up</a></li>
             <li><a href="login.php" class="active">Sign In</a></li>
-            <li><a href="bmi.php">Calculate BMI</a></li>
-            <li><a href="contact.php">Contact</a></li>
         </ul>
     </nav>
 </header>
 
 <div id="page-container">
-    <div id="content-wrap">
-        <div class="container">
-            <form class="form" method="post" name="login">
-                <h1 class="login-title">Login</h1>
-                <?php if (isset($error)) { echo "<p class='error'>$error</p>"; } ?>
-                
-                <div class="input-wrapper">
-                    <input type="email" class="login-input" name="email" placeholder="Email Address" autofocus required>
-                    <i class="fas fa-user"></i>
-                </div>
-                
-                <div class="input-wrapper">
-                    <input type="password" class="login-input" name="password" placeholder="Password" required>
-                    <i class="fas fa-lock"></i>
-                </div>
+    <div class="container">
+        <form class="form" method="post" name="login" onsubmit="validateForm(event)">
+            <h1 class="login-title">Login</h1>
+            <p id="error-message" class="error"></p> <!-- Error message container -->
 
-                <input type="submit" value="Login" name="submit" class="login-button">
-                
-                <div class="forgot-password">
-                    <a href="forgot_password.php">Forgot Password?</a>
-                </div>
-            </form>
-        </div>
+            <div class="input-wrapper">
+                <input type="email" class="login-input" name="email" placeholder="Email Address" autofocus required aria-label="Email Address">
+            </div>
+
+            <div class="input-wrapper">
+                <input type="password" class="login-input" name="password" placeholder="Password" required aria-label="Password">
+            </div>
+
+            <input type="submit" value="Login" name="submit" class="login-button" aria-label="Login Button">
+            
+            <div class="forgot-password">
+                <a href="forgot_password.php">Forgot Password?</a>
+            </div>
+        </form>
     </div>
 </div>
 
-<?php include 'footer.php'; ?>
+<footer>
+    <ul>
+        <li><a href="#">Privacy Policy</a></li>
+        <li><a href="#">Terms of Service</a></li>
+        <li><a href="#">Contact Us</a></li>
+    </ul>
+</footer>
 </body>
 </html>
