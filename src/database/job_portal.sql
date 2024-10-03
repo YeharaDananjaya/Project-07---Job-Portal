@@ -39,6 +39,7 @@ CREATE TABLE `users` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+
 --
 -- Dumping data for table `users`
 --
@@ -48,10 +49,6 @@ INSERT INTO `users` (`name`, `email`, `password`, `phone_number`, `type`) VALUES
 ('Jane Smith', 'jane.smith@example.com', 'hashedpassword2', '0987654321', 1);
 
 -- --------------------------------------------------------
-
---
--- Table structure for table `companies`
---
 
 CREATE TABLE `companies` (
   `company_id` int(11) NOT NULL AUTO_INCREMENT,
@@ -63,6 +60,11 @@ CREATE TABLE `companies` (
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
   PRIMARY KEY (`company_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Table structure for table `companies`
+--
+
 
 --
 -- Dumping data for table `companies`
@@ -90,6 +92,9 @@ CREATE TABLE `jobs` (
   FOREIGN KEY (`company_id`) REFERENCES `companies`(`company_id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+
+
+--
 --
 -- Dumping data for table `jobs`
 --
@@ -118,20 +123,28 @@ CREATE TABLE `applications` (
   INDEX `idx_job_id` (`job_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+ALTER TABLE applications
+ADD COLUMN company_id INT(11) NOT NULL COMMENT 'ID of the company associated with the job application',
+ADD FOREIGN KEY (company_id) REFERENCES companies(company_id) ON DELETE CASCADE ON UPDATE CASCADE;
+
+ALTER TABLE applications
+ADD COLUMN resume_file VARCHAR(255) DEFAULT NULL COMMENT 'Path or filename of the uploaded resume file';
+
+
 --
 -- Dumping data for table `applications`
 --
 
-INSERT INTO `applications` (`user_id`, `job_id`, `cover_letter`, `status`) VALUES
-(1, 1, 'I am excited to apply for the Software Engineer position...', 'pending'),
-(2, 2, 'I would like to be considered for the Data Analyst role...', 'pending');
+INSERT INTO `applications` (`user_id`, `job_id`, `company_id`, `cover_letter`, `resume_file`, `status`) VALUES
+(1, 1, 1, 'I am excited to apply for the Software Engineer position...', 'resume1.pdf', 'pending'),
+(2, 2, 2, 'I would like to be considered for the Data Analyst role...', 'resume2.pdf', 'pending');
+
 
 -- --------------------------------------------------------
 
 --
 -- Table structure for table `feedbacks`
 --
-
 CREATE TABLE `feedbacks` (
   `feedback_id` int(11) NOT NULL AUTO_INCREMENT,
   `user_id` int(11) NOT NULL,
@@ -144,13 +157,17 @@ CREATE TABLE `feedbacks` (
   FOREIGN KEY (`company_id`) REFERENCES `companies`(`company_id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+ALTER TABLE feedbacks
+ADD COLUMN job_id INT(11) NULL AFTER company_id,
+ADD FOREIGN KEY (job_id) REFERENCES jobs(job_id) ON DELETE CASCADE;
+
 --
 -- Dumping data for table `feedbacks`
 --
 
-INSERT INTO `feedbacks` (`user_id`, `company_id`, `rating`, `comments`) VALUES
-(1, 1, 5, 'Excellent company to work with!'),
-(2, 2, 4, 'Great experience, but there is room for improvement.');
+INSERT INTO `feedbacks` (`user_id`, `company_id`,`job_id`, `rating`, `comments`) VALUES
+(1, 1,2, 5, 'Excellent company to work with!'),
+(2, 2,1, 4, 'Great experience, but there is room for improvement.');
 
 -- --------------------------------------------------------
 
