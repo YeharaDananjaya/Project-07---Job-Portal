@@ -6,7 +6,7 @@ session_start();
 require('db.php');
 
 // Fetch jobs with their associated company names
-$query = "SELECT j.job_title, j.description, j.location, j.salary, c.company_name 
+$query = "SELECT j.job_id, j.job_title, j.description, j.location, j.salary, c.company_name 
           FROM jobs j 
           JOIN companies c ON j.company_id = c.company_id";
 $result = $con->query($query);
@@ -33,6 +33,10 @@ $result = $con->query($query);
                         <p><strong>Description:</strong> <?php echo htmlspecialchars($row['description']); ?></p>
                         <p><strong>Location:</strong> <?php echo htmlspecialchars($row['location']); ?></p>
                         <p><strong>Salary:</strong> $<?php echo htmlspecialchars($row['salary']); ?></p>
+                        <div class="button-group">
+                            <a href="edit_job.php?id=<?php echo $row['job_id']; ?>" class="button edit-button">Edit Job</a>
+                            <a href="delete_job.php?id=<?php echo $row['job_id']; ?>" class="button delete-button">Delete Job</a>
+                        </div>
                     </div>
                 <?php endwhile; ?>
             <?php else: ?>

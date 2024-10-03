@@ -66,3 +66,75 @@ h2 {
     border-radius: 4px; /* Rounded corners */
     margin-bottom: 10px; /* Space between border and content */
 }
+
+/* Edit and delete button logic */
+.button-group {
+    margin-top: 15px; /* Space between job details and buttons */
+}
+
+/* Common button styles */
+.button {
+    display: inline-block;
+    padding: 10px 15px;
+    margin: 5px;
+    border-radius: 5px;
+    text-decoration: none;
+    color: white;
+    font-weight: bold;
+    transition: background-color 0.3s, transform 0.2s, box-shadow 0.2s; /* Transition for hover effects */
+}
+
+/* Edit button styles */
+.edit-button {
+    background-color: #007BFF; /* Blue color for edit button */
+}
+
+/* Delete button styles */
+.delete-button {
+    background-color: #FF3B30; /* Red color for delete button */
+}
+
+/* Button hover effects */
+.button:hover {
+    transform: translateY(-3px); /* Raise the button on hover */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15); /* Add shadow on hover */
+}
+
+.button:active {
+    transform: translateY(0); /* Reset on click */
+    box-shadow: none; /* Remove shadow on click */
+}
+
+/*For the Delete Function */
+
+.button {
+    display: inline-block;
+    padding: 10px 20px;
+    margin: 10px 0;
+    border-radius: 5px;
+    text-decoration: none;
+    color: white;
+    font-weight: bold;
+    transition: background 0.3s, transform 0.2s;
+}
+
+.edit-button {
+    background-color: #007BFF; /* Blue for edit */
+}
+
+.delete-button {
+    background-color: #DC3545; /* Red for delete */
+}
+
+.cancel-button {
+    background-color: #6c757d; /* Grey for cancel */
+}
+
+.button:hover {
+    transform: translateY(-2px);
+}
+
+.button:active {
+    transform: translateY(0);
+}
+
