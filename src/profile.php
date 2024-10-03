@@ -170,33 +170,71 @@ include 'navbar.php';
         }
 
         /* Popup styles */
-        .popup {
-            display: none; /* Hidden by default */
-            position: fixed;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
-            justify-content: center;
-            align-items: center;
-        }
+        /* Popup styles */
+.popup {
+    display: none; /* Hidden by default */
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    justify-content: center;
+    align-items: center;
+    z-index: 1000; /* Ensure it's on top of other elements */
+}
 
-        .popup-content {
-            background-color: white;
-            padding: 20px;
-            border-radius: 5px;
-            width: 300px;
-            position: relative;
-        }
+.popup-content {
+    background-color: white;
+    padding: 30px;
+    border-radius: 8px;
+    width: 90%;
+    max-width: 400px; /* Set a max-width for better control */
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+    animation: fadeIn 0.3s; /* Add a fade-in effect */
+}
 
-        .close {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            cursor: pointer;
-            font-weight: bold;
-        }
+/* Input field styles */
+.popup-content input {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0; /* Add some margin for better spacing */
+    border: 1px solid #E76F51; /* Use primary color for borders */
+    border-radius: 5px;
+    transition: border-color 0.3s; /* Smooth transition for focus */
+}
+
+.popup-content input:focus {
+    border-color: #d65c47; /* Darker shade on focus */
+    outline: none; /* Remove default outline */
+}
+
+/* Button styles */
+.popup-content button {
+    width: 100%; /* Full width for buttons */
+    padding: 12px;
+    border: none;
+    border-radius: 5px;
+    background-color: #E76F51; /* Primary color */
+    color: #fff;
+    cursor: pointer;
+    margin-top: 15px; /* Add some space between buttons */
+    transition: background-color 0.3s; /* Smooth transition */
+}
+
+.popup-content button:hover {
+    background-color: #d65c47; /* Darker shade on hover */
+}
+
+/* Close button styles */
+.close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 18px; /* Increase size for better visibility */
+    cursor: pointer;
+    color: #666; /* Color for close button */
+}
 
         /* Delete confirmation styles */
         #delete-confirmation {
@@ -260,26 +298,27 @@ include 'navbar.php';
     </div>
 
     <div id="popup" class="popup">
-        <div class="popup-content">
-            <span class="close" onclick="document.getElementById('popup').style.display='none'">&times;</span>
-            <h2>Edit Profile</h2>
-            <form method="POST">
-                <div class="form-group">
-                    <label for="name-edit">Name</label>
-                    <input type="text" id="name-edit" name="name" value="<?= htmlspecialchars($user['name']); ?>" required>
-                </div>
-                <div class="form-group">
-                    <label for="phone_number-edit">Phone Number</label>
-                    <input type="text" id="phone_number-edit" name="phone_number" value="<?= htmlspecialchars($user['phone_number']); ?>" required>
-                </div>
-                <div class="form-group">
-                    <label for="new_password">New Password (Leave empty to keep current)</label>
-                    <input type="password" id="new_password" name="new_password">
-                </div>
-                <button type="submit" name="update" aria-label="Update Profile">Update</button>
-            </form>
-        </div>
+    <div class="popup-content">
+        <span class="close" onclick="document.getElementById('popup').style.display='none'">&times;</span>
+        <h2 style="text-align: center; margin-bottom: 20px; color: #E76F51;">Edit Profile</h2>
+        <form method="POST">
+            <div class="form-group">
+                <label for="name-edit">Name</label>
+                <input type="text" id="name-edit" name="name" value="<?= htmlspecialchars($user['name']); ?>" required>
+            </div>
+            <div class="form-group">
+                <label for="phone_number-edit">Phone Number</label>
+                <input type="text" id="phone_number-edit" name="phone_number" value="<?= htmlspecialchars($user['phone_number']); ?>" required>
+            </div>
+            <div class="form-group">
+                <label for="new_password">New Password (Leave empty to keep current)</label>
+                <input type="password" id="new_password" name="new_password">
+            </div>
+            <button type="submit" name="update" aria-label="Update Profile">Update</button>
+        </form>
     </div>
+</div>
+
 </div>
 <!-- Footer Section -->
 <?php include 'footer.php'; ?>
