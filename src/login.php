@@ -72,7 +72,6 @@ if (isset($con)) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400&family=Montserrat:wght@700&family=Open+Sans:wght@400&display=swap" rel="stylesheet">
     <title>Job Portal - Login</title>
     <style>
         body {
@@ -226,11 +225,10 @@ if (isset($con)) {
             color: #e74c3c; /* Hover color */
         }
     </style>
-    
 </head>
 <body>
 <header>
-<div class="logo">Job Portal</div>
+    <div class="logo">Job Portal</div>
     <nav>
         <ul>
             <li><a href="register.php">Sign Up</a></li>
@@ -241,20 +239,19 @@ if (isset($con)) {
 
 <div id="page-container">
     <div class="container">
-        <form class="form" method="post" name="login" onsubmit="validateForm(event)">
+        <form class="form" method="post" name="login">
             <h1 class="login-title">Login</h1>
-            <p id="error-message" class="error"></p> <!-- Error message container -->
 
             <div class="input-wrapper">
-                <input type="email" class="login-input" name="email" placeholder="Email Address" autofocus required aria-label="Email Address">
+                <input type="email" class="login-input" name="email" placeholder="Email Address" required>
             </div>
 
             <div class="input-wrapper">
-                <input type="password" class="login-input" name="password" placeholder="Password" required aria-label="Password">
+                <input type="password" class="login-input" name="password" placeholder="Password" required>
             </div>
 
-            <input type="submit" value="Login" name="submit" class="login-button" aria-label="Login Button">
-            
+            <input type="submit" value="Login" class="login-button">
+
             <div class="forgot-password">
                 <a href="forgot_password.php">Forgot Password?</a>
             </div>
@@ -269,5 +266,13 @@ if (isset($con)) {
         <li><a href="#">Contact Us</a></li>
     </ul>
 </footer>
+
+<!-- PHP Echoes Error Message as JavaScript -->
+<?php if (!empty($error)): ?>
+    <script>
+        alert("<?php echo $error; ?>");
+    </script>
+<?php endif; ?>
+
 </body>
 </html>
