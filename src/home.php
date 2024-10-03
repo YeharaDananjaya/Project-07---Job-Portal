@@ -127,7 +127,7 @@
         <div class="container">
             <h1 class="hero-title">Find Your Dream Job</h1>
             <p class="hero-subtitle">Connecting you with the best opportunities.</p>
-            <a href="#search" class="btn btn-primary">Get Started</a>
+            <a href="apply.php" class="btn btn-primary">Get Started</a>
         </div>
     </header>
 

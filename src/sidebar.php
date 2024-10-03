@@ -85,7 +85,7 @@ if (!isset($_SESSION['email'])) {
 
         .sidebar-menu li a:hover {
             color: #e74c3c; /* Change text color on hover */
-            
+             
             border: 2px solid #e74c3c; /* Border color on hover */
         }
 
@@ -114,8 +114,10 @@ if (!isset($_SESSION['email'])) {
     <div class="sidebar-container">
         <div class="sidebar-logo">Job Portal</div> <!-- Updated Logo -->
         <ul class="sidebar-menu">
+
             <li><a href="add_jobs.php">Add a Job</a></li>
             <li><a href="view_jobs_admin.php">View Jobs</a></li>
+            <li><a href="admin_applications.php">View Applications</a></li>
             <li><a href="addCompany.php">Add a Company</a></li>
             <li><a href="viewCompanies.php">View Companies</a></li>
             <li>

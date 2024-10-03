@@ -57,7 +57,7 @@ if (isset($_POST['logout'])) {
         }
 
         nav ul li {
-            margin: 0 15px;
+            margin: 0 10px;
         }
 
         nav a {
@@ -185,6 +185,7 @@ nav a:hover {
                 <li><a href="home.php">Home</a></li>
                 <li><a href="job_listings.php">Job Listings</a></li>
                 <li><a href="applications.php">Applications</a></li>
+                <li><a href="manageFeedbacks.php"> Feedbakcs</a></li>
                 <li><a href="about_us.php">About Us</a></li>
             </ul>
             <div class="search-bar">
