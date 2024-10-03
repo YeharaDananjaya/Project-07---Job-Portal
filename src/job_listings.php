@@ -5,20 +5,27 @@ session_start();
 // Include your database connection file
 require('db.php');
 
-// Initialize search query
-$search_query = "";
-if (isset($_GET['search'])) {
-    $search_query = $_GET['search'];
+// Initialize search variables
+$keyword = "";
+$location = "";
+
+// Check if search parameters are set
+if (isset($_GET['keyword'])) {
+    $keyword = $_GET['keyword'];
+}
+if (isset($_GET['location'])) {
+    $location = $_GET['location'];
 }
 
-// Fetch jobs with their associated company names, filtered by search query
+// Fetch jobs with their associated company names, filtered by search parameters
 $query = "SELECT j.job_id, j.job_title, j.description, j.location, j.salary, c.company_name 
           FROM jobs j 
           JOIN companies c ON j.company_id = c.company_id 
-          WHERE j.job_title LIKE ? OR c.company_name LIKE ? OR j.location LIKE ?";
+          WHERE j.job_title LIKE ? AND j.location LIKE ?";
 $stmt = $con->prepare($query);
-$search_term = "%" . $search_query . "%";
-$stmt->bind_param("sss", $search_term, $search_term, $search_term);
+$keyword_term = "%" . $keyword . "%";
+$location_term = "%" . $location . "%";
+$stmt->bind_param("ss", $keyword_term, $location_term);
 $stmt->execute();
 $result = $stmt->get_result();
 ?>
@@ -41,10 +48,11 @@ $result = $stmt->get_result();
 
                     <!-- Search Form -->
                     <form class="search-form" action="" method="GET">
-                        <input type="text" name="search" placeholder="Search by job title, company, or location" value="<?php echo htmlspecialchars($search_query); ?>">
-                        <button type="submit" class="search-button">Search</button>
+                        <input type="text" name="keyword" placeholder="Search by job title" value="<?php echo htmlspecialchars($keyword); ?>">
+                        <input type="text" name="location" placeholder="Location" value="<?php echo htmlspecialchars($location); ?>">
+                      
                     </form>
-
+                    <button type="submit" class="search-button">Search</button>
                     <h4>*If You want to apply for these jobs, You have to navigate to the Application Tab</h4>
 
             </div> 

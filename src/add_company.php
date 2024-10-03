@@ -85,7 +85,7 @@ include("sidebar.php");
         body {
             font-family: 'Arial', sans-serif;
             background-color: #f4f4f9;
-            margin: 0;
+            margin-top: 0;
             padding: 0;
             display: flex;
             justify-content: center;
@@ -95,6 +95,8 @@ include("sidebar.php");
 
         .add-company-container {
             background-color: #ffffff;
+            margin-top: 100px;
+            margin-left: 300px;
             padding: 40px;
             max-width: 500px;
             width: 100%;
