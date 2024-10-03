@@ -114,8 +114,8 @@ if (!isset($_SESSION['email'])) {
     <div class="sidebar-container">
         <div class="sidebar-logo">Job Portal</div> <!-- Updated Logo -->
         <ul class="sidebar-menu">
-            <li><a href="addJob.php">Add a Job</a></li>
-            <li><a href="viewJobs.php">View Jobs</a></li>
+            <li><a href="add_jobs.php">Add a Job</a></li>
+            <li><a href="view_jobs_admin.php">View Jobs</a></li>
             <li><a href="addCompany.php">Add a Company</a></li>
             <li><a href="viewCompanies.php">View Companies</a></li>
             <li>
