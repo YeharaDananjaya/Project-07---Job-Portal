@@ -1,76 +1,178 @@
-<?php
-// Start the session
-session_start();
-
-// Include your database connection file
-require('db.php');
-
-// Check if the user is logged in
-if (!isset($_SESSION['email'])) {
-    header("Location: login.php");
-    exit();
-}
-
-include 'navbar.php'; 
-?>
+<?php include 'navbar.php'; ?>
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="styles/home.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <title>Home</title>
+    <title>Job Portal - Home</title>
+    <style>
+        /* Reset some default styles */
+        body, h1, h2, h3, p {
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: "Sanchez", sans-serif;
+            line-height: 1.6; /* Improved readability */
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1200px; /* Centering the container */
+            margin: auto;
+        }
+
+        /* Hero Section */
+        .hero-section {
+            background-color: #1c3d3f; /* Dark blue */
+            color: #fff;
+            padding: 80px 0; /* More padding for better spacing */
+            text-align: center;
+        }
+
+        .hero-title {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+        }
+
+        .hero-subtitle {
+            font-size: 1.25rem;
+            margin-bottom: 30px;
+        }
+
+        /* Search Section */
+        .search-section {
+            padding: 40px 0;
+            text-align: center;
+        }
+
+        .search-form {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap; /* Allow inputs to wrap on smaller screens */
+        }
+
+        .search-input {
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            width: 250px; /* Fixed width for consistency */
+            min-width: 200px; /* Minimum width for smaller screens */
+        }
+
+        /* Job Listings Section */
+        .job-listings {
+            padding: 40px 0;
+        }
+
+        .job-card {
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            padding: 20px;
+            text-align: center;
+            transition: box-shadow 0.3s;
+            background-color: #fff; /* White background for cards */
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+        }
+
+        .job-card:hover {
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .job-title {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+        }
+
+        /* About Section */
+        .about-section {
+            background-color: #fafafa; /* Light gray */
+            padding: 40px 0;
+            text-align: center;
+        }
+
+        .section-title {
+            font-size: 2rem;
+            margin-bottom: 20px;
+        }
+
+        /* Button Styles */
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
+            color: #fff;
+        }
+
+        .btn-primary {
+            background-color: #E76F51; /* Primary color */
+        }
+
+        .btn-secondary {
+            background-color: #379D9D; /* Secondary color */
+        }
+
+    </style>
 </head>
 <body>
 
-<div class="home-container">
-    <section class="hero">
-        <h2>How Fitness Master Helps You</h2>
-        <p>At Fitness Master, we understand your goals and lifestyle before creating a personalized plan that works for YOU.</p>
+    <!-- Hero Section -->
+    <header class="hero-section">
+        <div class="container">
+            <h1 class="hero-title">Find Your Dream Job</h1>
+            <p class="hero-subtitle">Connecting you with the best opportunities.</p>
+            <a href="#search" class="btn btn-primary">Get Started</a>
+        </div>
+    </header>
+
+    <!-- Search Section -->
+    <section id="search" class="search-section">
+        <div class="container">
+            <h2 class="section-title">Search for Jobs</h2>
+            <form action="search.php" method="GET" class="search-form">
+                <input type="text" name="keyword" placeholder="Job title or keywords" class="search-input" required>
+                <input type="text" name="location" placeholder="Location" class="search-input" required>
+                <button type="submit" class="btn btn-secondary">Search</button>
+            </form>
+        </div>
     </section>
-    
-    <section class="plans">
-        <h2>The Right Plan for Your Health</h2>
-        <p>Choose the perfect plan for your fitness needs. Flexible and easy to follow.</p>
-        
-        <div class="plan-cards">
-            <div class="plan-card card-1">
-                <h3><i class="fas fa-dumbbell"></i> Fitness Coaching</h3>
-                <ul>
-                    <li>Internationally certified coaches</li>
-                    <li>Personalized workout plans</li>
-                    <li>Nutrition advice tailored to your needs</li>
-                    <li>Weekly check-ins with your coach</li>
-                </ul>
-                <button>View Coaches</button>
-            </div>
 
-            <div class="plan-card card-2">
-                <h3><i class="fas fa-apple-alt"></i> Nutrition Coaching</h3>
-                <ul>
-                    <li>Scientifically backed plans</li>
-                    <li>Personalized based on your fitness level</li>
-                    <li>Ongoing adjustments for progress</li>
-                    <li>1-on-1 coaching support</li>
-                </ul>
-                <button>View Coaches</button>
-            </div>
-
-            <div class="plan-card card-3">
-                <h3><i class="fas fa-chart-line"></i> Advanced Strategies</h3>
-                <ul>
-                    <li>Custom-tailored to your goals</li>
-                    <li>Daily check-ins with your coach</li>
-                    <li>Exclusive coaching advice</li>
-                </ul>
-                <button>View Coaches</button>
+    <!-- Job Listings Section -->
+    <section class="job-listings">
+        <div class="container">
+            <h2 class="section-title">Featured Job Listings</h2>
+            <div class="row">
+                <!-- Job Listing Item -->
+                <div class="col-md-4 mb-4">
+                    <div class="job-card">
+                        <h3 class="job-title">Software Engineer</h3>
+                        <p class="company-name">ABC Tech</p>
+                        <p class="job-location">Remote</p>
+                        <p class="job-description">Looking for a skilled Software Engineer to join our team.</p>
+                        <a href="job-details.php?id=1" class="btn btn-primary">View Details</a>
+                    </div>
+                </div>
+                <!-- Add more job listings here -->
             </div>
         </div>
     </section>
-</div>
 
-<?php include 'footer.php'; ?>
+    <!-- About Section -->
+    <section class="about-section">
+        <div class="container">
+            <h2 class="section-title">About Us</h2>
+            <p>We are committed to connecting job seekers with the right opportunities. Our platform offers a variety of job listings across multiple industries.</p>
+        </div>
+    </section>
+
+    <!-- Footer Section -->
+    <?php include 'footer.php'; ?>
+
 </body>
 </html>
