@@ -65,105 +65,199 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fitness Master - Register</title>
-    <link rel="stylesheet" type="text/css" href="styles/regstyle.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
-    <script>
-        function validateEmail(email) {
-            const emailField = document.getElementById('email');
-            const emailError = document.getElementById('email-error');
-            const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-            if (!regex.test(email)) {
-                emailError.innerText = "Invalid email format.";
-                emailField.classList.add('error-input');
-                return false; // Prevent form submission
-            } else {
-                emailError.innerText = "";
-                emailField.classList.remove('error-input');
-                return true; // Valid email
-            }
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400&family=Montserrat:wght@700&family=Open+Sans:wght@400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles/regstyle.css">
+    <title>Registration Page</title>
+    <style>
+        body {
+            background-color: #F5F7FA;
+            font-family: 'Open Sans', sans-serif;
+            margin: 0;
+            padding: 0;
         }
 
-        function validatePasswords() {
-            const password = document.getElementById('password').value;
-            const confirmPassword = document.getElementById('confirm_password').value;
-            const passwordError = document.getElementById('password-error');
-
-            if (password !== confirmPassword) {
-                passwordError.innerText = "Passwords do not match.";
-                return false; // Prevent form submission
-            } else {
-                passwordError.innerText = "";
-                return true; // Valid passwords
-            }
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #2c3e50;
+            padding: 20px;
+            color: white;
         }
 
-        function validateForm() {
-            const email = document.getElementById('email').value;
-            return validateEmail(email) && validatePasswords(); // Ensure all validations pass
+        header .logo {
+            font-size: 24px;
+            font-family: 'Montserrat', sans-serif;
         }
-    </script>
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            margin: 0;
+            padding: 0;
+        }
+
+        nav ul li {
+            margin: 0 15px;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            transition: color 0.3s;
+            padding: 10px 20px;
+            border-radius: 5px;
+            border: 2px solid transparent;
+        }
+
+        nav a:hover {
+            color: #e74c3c;
+            border: 2px solid #e74c3c;
+        }
+
+        .hero {
+            text-align: center;
+            padding: 50px 0;
+            color: #34495e;
+        }
+
+        .registration-form {
+            background-color: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            max-width: 400px;
+            margin: 50px auto;
+            transition: transform 0.3s;
+        }
+
+        .registration-form:hover {
+            transform: translateY(-5px);
+        }
+
+        .error-messages {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+            border-radius: 5px;
+            padding: 10px;
+            margin-bottom: 15px;
+        }
+
+        .registration-form form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .registration-form label {
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+
+        .registration-form input {
+            margin-bottom: 20px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            transition: border-color 0.3s;
+        }
+
+        .registration-form input:focus {
+            border-color: #e74c3c;
+            outline: none;
+        }
+
+        .registration-form button {
+            background-color: #e74c3c;
+            color: white;
+            border: none;
+            padding: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.2s;
+        }
+
+        .registration-form button:hover {
+            background-color: #c0392b;
+            transform: scale(1.05);
+        }
+
+        footer {
+            background-color: #2c3e50;
+            color: white;
+            text-align: center;
+            padding: 20px;
+        }
+
+        footer ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        footer ul li {
+            display: inline;
+            margin: 0 10px;
+        }
+
+        footer a {
+            color: white;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        footer a:hover {
+            color: #e74c3c;
+        }
+    </style>
 </head>
 <body>
-<header>
-    <div class="logo">
-        <a href="#">Fitness Master</a>
-    </div>
-    <nav>
-        <ul>
-            <li><a href="login.php">Sign In</a></li>
-            <li><a href="register.php" class="active">Sign Up</a></li>
-            <li><a href="bmi.php">Calculate BMI</a></li>
-            <li><a href="contact.php">Contact</a></li>
-        </ul>
-    </nav>
-</header>
-
-<div id="page-container">
-    <div id="content-wrap">
-        <div class="container">
-            <form class="form" method="post" onsubmit="return validateForm()">
-                <h1 class="login-title">Sign Up</h1>
-                <?php if (!empty($errors)) { 
-                    foreach ($errors as $error) {
-                        echo "<p class='error'>$error</p>"; 
-                    }
-                } ?>
+    <header>
+        <div class="logo">Job Portal</div>
+        <nav>
+            <ul>
+                <li><a href="register.php">Sign Up</a></li>
+                <li><a href="login.php">Sign In</a></li>
+            </ul>
+        </nav>
+    </header>
+    
+    <main>
+        <section class="hero">
+            <h1>Join Our Professional Community Today!</h1>
+        </section>
+        
+        <section class="registration-form">
+            <?php if (!empty($errors)): ?>
+                <div class="error-messages">
+                    <ul>
+                        <?php foreach ($errors as $error): ?>
+                            <li><?php echo $error; ?></li>
+                        <?php endforeach; ?>
+                    </ul>
+                </div>
+            <?php endif; ?>
+            <form method="POST" action="">
+                <label for="name">Name</label>
+                <input type="text" id="name" name="name" placeholder="" required>
                 
-                <div class="input-group">
-                    <input type="text" class="login-input" name="name" placeholder="Name" required />
-                    <i class="fas fa-user"></i>
-                </div>
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email" placeholder="" required>
                 
-                <div class="input-group">
-                    <input type="email" class="login-input" id="email" name="email" placeholder="Email Address" onblur="validateEmail(this.value)" required />
-                    <i class="fas fa-envelope"></i>
-                    <p class="error-message" id="email-error"></p>
-                </div>
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" placeholder="" required>
                 
-                <div class="input-group">
-                    <input type="text" class="login-input" name="phone_number" placeholder="Phone Number" required />
-                    <i class="fas fa-phone"></i>
-                </div>
-
-                <div class="input-group">
-                    <input type="password" class="login-input" id="password" name="password" placeholder="Password" required />
-                    <i class="fas fa-lock"></i>
-                </div>
-
-                <div class="input-group">
-                    <input type="password" class="login-input" id="confirm_password" name="confirm_password" placeholder="Confirm Password" oninput="validatePasswords()" required />
-                    <i class="fas fa-lock"></i>
-                    <p class="error-message" id="password-error"></p>
-                </div>
+                <label for="confirm-password">Confirm Password</label>
+                <input type="password" id="confirm-password" name="confirm_password" placeholder="" required>
                 
-                <input type="submit" name="submit" value="Sign Up" class="login-button">
+                <label for="phone">Phone</label>
+                <input type="tel" id="phone" name="phone_number" placeholder="" required>
+                
+                <button type="submit">Register Now</button>
             </form>
-        </div>
-    </div>
-</div>
-
-<?php include 'footer.php'; ?> 
+        </section>
+    </main>
+    
+    <?php include 'footer.php'; ?>
 </body>
 </html>
