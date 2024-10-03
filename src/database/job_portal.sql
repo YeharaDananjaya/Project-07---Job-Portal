@@ -171,4 +171,9 @@ INSERT INTO `feedbacks` (`user_id`, `company_id`,`job_id`, `rating`, `comments`)
 
 -- --------------------------------------------------------
 
+ALTER TABLE `companies`
+ADD COLUMN `logo` VARCHAR(255) DEFAULT NULL AFTER `contact_number`,
+ADD COLUMN `description` TEXT DEFAULT NULL AFTER `logo`;
+
+
 COMMIT;
