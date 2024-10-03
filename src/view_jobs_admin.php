@@ -12,6 +12,8 @@ $query = "SELECT j.job_id, j.job_title, j.description, j.location, j.salary, c.c
 $result = $con->query($query);
 ?>
 
+<?php include("sidebar.php"); ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>

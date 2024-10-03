@@ -9,14 +9,32 @@ require('db.php');
 if (isset($_GET['id'])) {
     $job_id = $_GET['id'];
 
-    // Prepare and execute delete query
+    // Fetch the job details to display as a preview
+    $query = "SELECT j.job_title, j.description, j.location, j.salary, c.company_name 
+              FROM jobs j 
+              JOIN companies c ON j.company_id = c.company_id 
+              WHERE j.job_id = ?";
+    $stmt = $con->prepare($query);
+    $stmt->bind_param("i", $job_id);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    
+    // Check if the job exists
+    if ($result->num_rows > 0) {
+        $job = $result->fetch_assoc();
+    } else {
+        echo "Job not found.";
+        exit;
+    }
+
+    // Prepare and execute delete query when form is submitted
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $delete_query = "DELETE FROM jobs WHERE job_id = ?";
         $stmt = $con->prepare($delete_query);
         $stmt->bind_param("i", $job_id);
 
         if ($stmt->execute()) {
-            header("Location: view_jobs_admin.php"); // Redirect back to the job list
+            header("Location: view_jobs_admin.php"); // Redirect back to the job list after deletion
             exit;
         } else {
             echo "Error deleting job: " . $con->error;
@@ -28,6 +46,8 @@ if (isset($_GET['id'])) {
 }
 ?>
 
+<?php include("sidebar.php"); ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -37,12 +57,23 @@ if (isset($_GET['id'])) {
     <link rel="stylesheet" href="styles/job_view.css">
 </head>
 <body>
-    <div class="job-container">
+    <div class="job-container1">
         <h2>Confirm Deletion</h2>
-        <p>Are you sure you want to delete this job?</p>
+        <p>Are you sure you want to delete the following job?</p>
+
+        <!-- Job card preview -->
+        <div class="job-card1">
+            <h3><?php echo htmlspecialchars($job['job_title']); ?></h3>
+            <p><strong>Company:</strong> <?php echo htmlspecialchars($job['company_name']); ?></p>
+            <p><strong>Description:</strong> <?php echo htmlspecialchars($job['description']); ?></p>
+            <p><strong>Location:</strong> <?php echo htmlspecialchars($job['location']); ?></p>
+            <p><strong>Salary:</strong> $<?php echo htmlspecialchars($job['salary']); ?></p>
+        </div>
+
+        <!-- Confirmation form -->
         <form action="" method="POST">
             <button type="submit" class="button delete-button">Yes, Delete Job</button>
-            <a href="view_jobs.php" class="button cancel-button">Cancel</a>
+            <a href="view_jobs_admin.php" class="button cancel-button">Cancel</a>
         </form>
     </div>
 </body>
