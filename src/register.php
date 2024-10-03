@@ -45,16 +45,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $stmt->bind_param("ssss", $name, $email, $phone_number, $hashed_password);
 
             if ($stmt->execute()) {
-                // Registration successful
-                $_SESSION['name'] = $name; // Store name in session
-                echo "<div class='form-success'>
-                          <h3>You are registered successfully.</h3>
-                          <p class='link'>Click here to <a href='login.php'>Login</a></p>
-                          </div>";
-                exit();
-            } else {
-                $errors[] = "Registration failed. Please try again.";
-            }
+    // Registration successful
+    $_SESSION['name'] = $name; // Store name in session
+   
+
+    // Auto redirect after 3 seconds
+    header("Location: login.php");
+exit();
+
+} else {
+    $errors[] = "Registration failed. Please try again.";
+}
         }
     }
 }

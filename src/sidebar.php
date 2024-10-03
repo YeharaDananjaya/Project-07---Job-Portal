@@ -118,7 +118,7 @@ if (!isset($_SESSION['email'])) {
             <li><a href="add_jobs.php">Add a Job</a></li>
             <li><a href="view_jobs_admin.php">View Jobs</a></li>
             <li><a href="admin_applications.php">View Applications</a></li>
-            <li><a href="addCompany.php">Add a Company</a></li>
+            <li><a href="add_Company.php">Add a Company</a></li>
             <li><a href="viewCompanies.php">View Companies</a></li>
             <li>
                 <form id="logoutForm" action="" method="POST" style="display: inline;">

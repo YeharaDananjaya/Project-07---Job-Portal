@@ -132,16 +132,17 @@
     </header>
 
     <!-- Search Section -->
-    <section id="search" class="search-section">
-        <div class="container">
-            <h2 class="section-title">Search for Jobs</h2>
-            <form action="search.php" method="GET" class="search-form">
-                <input type="text" name="keyword" placeholder="Job title or keywords" class="search-input" required>
-                <input type="text" name="location" placeholder="Location" class="search-input" required>
-                <button type="submit" class="btn btn-secondary">Search</button>
-            </form>
-        </div>
-    </section>
+<section id="search" class="search-section">
+    <div class="container">
+        <h2 class="section-title">Search for Jobs</h2>
+        <form action="job_listings.php" method="GET" class="search-form">
+            <input type="text" name="keyword" placeholder="Job title or keywords" class="search-input" >
+            <input type="text" name="location" placeholder="Location" class="search-input" >
+            <button type="submit" class="btn btn-secondary">Search</button>
+        </form>
+    </div>
+</section>
+
 
 
     <!-- Job Listings Section -->
