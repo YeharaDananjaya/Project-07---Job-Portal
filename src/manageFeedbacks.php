@@ -200,74 +200,109 @@ if (!$result) {
        
     </div>
 
-    <!-- Modal Structure -->
-    <div id="myModal" class="modal">
-        <div class="modal-content">
-            <span class="close" id="closeModal">&times;</span>
-            <h2>Edit Feedback</h2>
-            <form id="editForm" method="POST">
-                <input type="hidden" id="feedback_id" name="feedback_id">
-                <div style="margin-bottom: 15px;">
-                    <label for="username" style="font-weight: bold;">User Name:</label>
-                    <input type="text" id="username" name="username" style="width: 100%; padding: 8px; margin-top: 5px; border: 1px solid #ccc; border-radius: 4px;" required readonly>
+   <!-- Modal Structure -->
+<div id="myModal" class="modal">
+    <div class="modal-content">
+        <span class="close" id="closeModal">&times;</span>
+        <h2>Edit Feedback</h2>
+        <form id="editForm" method="POST">
+            <input type="hidden" id="feedback_id" name="feedback_id">
+            <div style="margin-bottom: 15px;">
+                <label for="username" style="font-weight: bold;">User Name:</label>
+                <input type="text" id="username" name="username" style="width: 100%; padding: 8px; margin-top: 5px; border: 1px solid #ccc; border-radius: 4px;" required readonly>
+            </div>
+            <div style="margin-bottom: 15px;">
+                <label for="company" style="font-weight: bold;">Company Name:</label>
+                <input type="text" id="company" name="company" style="width: 100%; padding: 8px; margin-top: 5px; border: 1px solid #ccc; border-radius: 4px;" required readonly>
+            </div>
+            <div style="margin-bottom: 15px;">
+                <label for="job" style="font-weight: bold;">Job Title:</label>
+                <input type="text" id="job" name="job" style="width: 100%; padding: 8px; margin-top: 5px; border: 1px solid #ccc; border-radius: 4px;" required readonly>
+            </div>
+            <div style="margin-bottom: 15px;">
+                <label for="rating" style="font-weight: bold;">Rating:</label>
+                <div id="starRating" class="rating">
+                    <!-- Star icons (initially empty) -->
+                    <i class="far fa-star" data-value="1"></i>
+                    <i class="far fa-star" data-value="2"></i>
+                    <i class="far fa-star" data-value="3"></i>
+                    <i class="far fa-star" data-value="4"></i>
+                    <i class="far fa-star" data-value="5"></i>
                 </div>
-                <div style="margin-bottom: 15px;">
-                    <label for="company" style="font-weight: bold;">Company Name:</label>
-                    <input type="text" id="company" name="company" style="width: 100%; padding: 8px; margin-top: 5px; border: 1px solid #ccc; border-radius: 4px;" required readonly>
-                </div>
-                <div style="margin-bottom: 15px;">
-                    <label for="job" style="font-weight: bold;">Job Title:</label>
-                    <input type="text" id="job" name="job" style="width: 100%; padding: 8px; margin-top: 5px; border: 1px solid #ccc; border-radius: 4px;" required readonly>
-                </div>
-                <div style="margin-bottom: 15px;">
-                    <label for="rating" style="font-weight: bold;">Rating:</label>
-                    <select id="rating" name="rating" required>
-                        <option value="1">1</option>
-                        <option value="2">2</option>
-                        <option value="3">3</option>
-                        <option value="4">4</option>
-                        <option value="5">5</option>
-                    </select>
-                </div>
-                <div style="margin-bottom: 15px;">
-                    <label for="comments" style="font-weight: bold;">Comments:</label>
-                    <textarea id="comments" name="comments" rows="4" style="width: 100%; padding: 8px; margin-top: 5px; border: 1px solid #ccc; border-radius: 4px;" required></textarea>
-                </div>
-                <button type="submit" style="padding: 10px 15px; background-color: #007bff; color: white; border: none; border-radius: 4px;">Update Feedback</button>
-            </form>
-        </div>
+                <input type="hidden" id="rating" name="rating" value="1" required>
+            </div>
+            <div style="margin-bottom: 15px;">
+                <label for="comments" style="font-weight: bold;">Comments:</label>
+                <textarea id="comments" name="comments" rows="4" style="width: 100%; padding: 8px; margin-top: 5px; border: 1px solid #ccc; border-radius: 4px;" required></textarea>
+            </div>
+            <button type="submit" style="padding: 10px 15px; background-color: #007bff; color: white; border: none; border-radius: 4px;">Update Feedback</button>
+        </form>
     </div>
+</div>
 
-    <script>
-        // Get modal element
-        var modal = document.getElementById("myModal");
-        var closeModal = document.getElementById("closeModal");
+<script>
+    // Get modal element
+    var modal = document.getElementById("myModal");
+    var closeModal = document.getElementById("closeModal");
 
-        // Show modal when edit button is clicked
-        document.querySelectorAll('.editBtn').forEach(function(button) {
-            button.onclick = function() {
-                document.getElementById('feedback_id').value = this.getAttribute('data-id');
-                document.getElementById('username').value = this.getAttribute('data-username');
-                document.getElementById('company').value = this.getAttribute('data-company');
-                document.getElementById('job').value = this.getAttribute('data-job');
-                document.getElementById('rating').value = this.getAttribute('data-rating');
-                document.getElementById('comments').value = this.getAttribute('data-comment');
+    // Show modal when edit button is clicked
+    document.querySelectorAll('.editBtn').forEach(function(button) {
+        button.onclick = function() {
+            document.getElementById('feedback_id').value = this.getAttribute('data-id');
+            document.getElementById('username').value = this.getAttribute('data-username');
+            document.getElementById('company').value = this.getAttribute('data-company');
+            document.getElementById('job').value = this.getAttribute('data-job');
+            document.getElementById('rating').value = this.getAttribute('data-rating');
+            updateStars(this.getAttribute('data-rating')); // Update star rating display
+            document.getElementById('comments').value = this.getAttribute('data-comment');
+            
+            modal.style.display = "block";
+        };
+    });
 
-                modal.style.display = "block";
-            };
-        });
+    // Close modal when the close button is clicked
+    closeModal.onclick = function() {
+        modal.style.display = "none";
+    };
 
-        // Close modal when the close button is clicked
-        closeModal.onclick = function() {
+    // Close modal when clicking outside of the modal
+    window.onclick = function(event) {
+        if (event.target == modal) {
             modal.style.display = "none";
-        };
+        }
+    };
 
-        // Close modal when clicking outside of the modal
-        window.onclick = function(event) {
-            if (event.target == modal) {
-                modal.style.display = "none";
+    // Star rating logic
+    var stars = document.querySelectorAll('#starRating i');
+    stars.forEach(function(star) {
+        star.addEventListener('click', function() {
+            var ratingValue = this.getAttribute('data-value');
+            document.getElementById('rating').value = ratingValue;
+            updateStars(ratingValue); // Update star display on click
+        });
+    });
+
+    // Function to update star appearance
+    function updateStars(rating) {
+        stars.forEach(function(star) {
+            if (star.getAttribute('data-value') <= rating) {
+                star.classList.remove('far'); // empty star
+                star.classList.add('fas'); // filled star
+            } else {
+                star.classList.remove('fas');
+                star.classList.add('far');
             }
-        };
-    </script>
+        });
+    }
+
+    // Initialize stars based on current rating
+    function initializeStars() {
+        var rating = document.getElementById('rating').value;
+        updateStars(rating);
+    }
+
+    // Initialize stars when the page is loaded
+    document.addEventListener('DOMContentLoaded', initializeStars);
+</script>
 </body>
 </html>
