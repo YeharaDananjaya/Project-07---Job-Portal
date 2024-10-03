@@ -183,7 +183,7 @@ nav a:hover {
         <nav>
             <ul>
                 <li><a href="home.php">Home</a></li>
-                <li><a href="add_Jobs.php">Job Listings</a></li>
+                <li><a href="job_listings.php">Job Listings</a></li>
                 <li><a href="applications.php">Applications</a></li>
                 <li><a href="about_us.php">About Us</a></li>
             </ul>
