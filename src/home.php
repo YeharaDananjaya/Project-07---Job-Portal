@@ -127,7 +127,7 @@
         <div class="container">
             <h1 class="hero-title">Find Your Dream Job</h1>
             <p class="hero-subtitle">Connecting you with the best opportunities.</p>
-            <a href="#search" class="btn btn-primary">Get Started</a>
+            <a href="apply.php" class="btn btn-primary">Get Started</a>
         </div>
     </header>
 
@@ -143,25 +143,43 @@
         </div>
     </section>
 
+
     <!-- Job Listings Section -->
     <section class="job-listings">
         <div class="container">
-            <h2 class="section-title">Featured Job Listings</h2>
+            <h2 class="section-title">Available Job Listings</h2>
             <div class="row">
-                <!-- Job Listing Item -->
-                <div class="col-md-4 mb-4">
-                    <div class="job-card">
-                        <h3 class="job-title">Software Engineer</h3>
-                        <p class="company-name">ABC Tech</p>
-                        <p class="job-location">Remote</p>
-                        <p class="job-description">Looking for a skilled Software Engineer to join our team.</p>
-                        <a href="job-details.php?id=1" class="btn btn-primary">View Details</a>
-                    </div>
-                </div>
-                <!-- Add more job listings here -->
+                <?php
+                // Fetch all jobs with their associated company names
+                $query = "SELECT j.job_id, j.job_title, c.company_name, j.location, j.description 
+                        FROM jobs j 
+                        JOIN companies c ON j.company_id = c.company_id";
+                $result = $con->query($query);
+
+                if ($result->num_rows > 0) {
+                    while ($row = $result->fetch_assoc()) {
+                        ?>
+                        <!-- Job Listing Item -->
+                        <div class="col-md-4 mb-4">
+                            <div class="job-card">
+                                <h3 class="job-title"><?php echo htmlspecialchars($row['job_title']); ?></h3>
+                                <p class="company-name"><?php echo htmlspecialchars($row['company_name']); ?></p>
+                                <p class="job-location"><?php echo htmlspecialchars($row['location']); ?></p>
+                                <p class="job-description"><?php echo htmlspecialchars($row['description']); ?></p>
+                                <a href="job-details.php?id=<?php echo $row['job_id']; ?>" class="btn btn-primary">View Details</a>
+                            </div>
+                        </div>
+                        <?php
+                    }
+                } else {
+                    echo '<p>No jobs available at the moment.</p>';
+                }
+                ?>
             </div>
         </div>
     </section>
+
+
 
     <!-- About Section -->
     <section class="about-section">
