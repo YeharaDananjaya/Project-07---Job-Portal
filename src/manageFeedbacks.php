@@ -107,6 +107,21 @@ if (!$result) {
         .actions button:hover, .actions a:hover {
             background-color: #0056b3;
         }
+        .feedback-btn {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: #28a745;
+            color: white;
+            text-align: center;
+            border-radius: 4px;
+            text-decoration: none;
+            font-size: 1em;
+            transition: background-color 0.3s;
+        }
+        .feedback-btn:hover {
+            background-color: #218838;
+        }
         /* Modal Styles */
         .modal {
             display: none;
@@ -140,7 +155,7 @@ if (!$result) {
 <body>
     <div class="container">
         <h1>Manage Feedbacks</h1>
-
+        <a href="feedback_create.php" class="feedback-btn">Give Feedback</a>
         <?php if ($message): ?>
             <div style="margin-bottom: 20px; color: green;"><?php echo $message; ?></div>
         <?php endif; ?>
@@ -166,6 +181,9 @@ if (!$result) {
             echo "<p>No feedbacks found.</p>";
         }
         ?>
+        
+        <!-- "Give Feedback" button -->
+       
     </div>
 
     <!-- Modal Structure -->
@@ -188,48 +206,64 @@ if (!$result) {
                     <input type="text" id="job" name="job" style="width: 100%; padding: 8px; margin-top: 5px; border: 1px solid #ccc; border-radius: 4px;" required readonly>
                 </div>
                 <div style="margin-bottom: 15px;">
-                    <label for="rating" style="font-weight: bold;">Rating:</label>
-                    <input type="number" id="rating" name="rating" min="1" max="5" style="width: 100%; padding: 8px; margin-top: 5px; border: 1px solid #ccc; border-radius: 4px;" required>
-                </div>
+    <label for="rating" style="font-weight: bold;">Rating:</label>
+    <select id="rating" name="rating" style="width: 100%; padding: 8px; margin-top: 5px; border: 1px solid #ccc; border-radius: 4px;" required>
+        <option value="1">1 - Poor</option>
+        <option value="2">2 - Fair</option>
+        <option value="3">3 - Good</option>
+        <option value="4">4 - Very Good</option>
+        <option value="5">5 - Excellent</option>
+    </select>
+</div>
+
                 <div style="margin-bottom: 15px;">
                     <label for="comments" style="font-weight: bold;">Comments:</label>
-                    <textarea id="comments" name="comments" style="width: 100%; padding: 8px; margin-top: 5px; border: 1px solid #ccc; border-radius: 4px;" required></textarea>
+                    <textarea id="comments" name="comments" rows="4" style="width: 100%; padding: 8px; margin-top: 5px; border: 1px solid #ccc; border-radius: 4px;" required></textarea>
                 </div>
-                <button type="submit" style="padding: 10px 15px; background-color: #28a745; color: white; border: none; border-radius: 4px; cursor: pointer;">Update Feedback</button>
+                <button type="submit" style="background-color: #007bff; color: white; padding: 10px 20px; border: none; border-radius: 4px; cursor: pointer;">Save Changes</button>
             </form>
         </div>
     </div>
 
     <script>
         // Get modal elements
-        var modal = document.getElementById("myModal");
-        var editBtns = document.querySelectorAll(".editBtn");
-        var closeModal = document.getElementById("closeModal");
+        const modal = document.getElementById('myModal');
+        const closeModalBtn = document.getElementById('closeModal');
+        const editForm = document.getElementById('editForm');
+        const editBtns = document.querySelectorAll('.editBtn');
 
-        // Open modal and fill in the values
-        editBtns.forEach(function(btn) {
-            btn.onclick = function() {
-                modal.style.display = "block";
-                document.getElementById("feedback_id").value = this.dataset.id;
-                document.getElementById("username").value = this.dataset.username;
-                document.getElementById("company").value = this.dataset.company;
-                document.getElementById("job").value = this.dataset.job;
-                document.getElementById("rating").value = this.dataset.rating;
-                document.getElementById("comments").value = this.dataset.comment;
-            }
+        // Open modal and populate form with feedback data
+        editBtns.forEach(btn => {
+            btn.addEventListener('click', function() {
+                const feedbackId = this.getAttribute('data-id');
+                const username = this.getAttribute('data-username');
+                const company = this.getAttribute('data-company');
+                const job = this.getAttribute('data-job');
+                const rating = this.getAttribute('data-rating');
+                const comment = this.getAttribute('data-comment');
+                
+                document.getElementById('feedback_id').value = feedbackId;
+                document.getElementById('username').value = username;
+                document.getElementById('company').value = company;
+                document.getElementById('job').value = job;
+                document.getElementById('rating').value = rating;
+                document.getElementById('comments').value = comment;
+                
+                modal.style.display = 'block';
+            });
         });
 
         // Close modal
-        closeModal.onclick = function() {
-            modal.style.display = "none";
-        }
+        closeModalBtn.addEventListener('click', function() {
+            modal.style.display = 'none';
+        });
 
-        // Close modal when clicking outside of it
-        window.onclick = function(event) {
+        // Close modal when clicking outside of the modal content
+        window.addEventListener('click', function(event) {
             if (event.target == modal) {
-                modal.style.display = "none";
+                modal.style.display = 'none';
             }
-        }
+        });
     </script>
 </body>
 </html>
