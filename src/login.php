@@ -33,7 +33,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     // Successful login for admin
                     $_SESSION['email'] = $user['email'];
                     $_SESSION['type'] = $user['type']; // Store user type in session
-                    header("Location: viewCoaches.php"); // Redirect to admin dashboard
+                    header("Location: add_company.php"); // Redirect to admin dashboard
                     exit();
                 } else {
                     $error = "Invalid email or password";
