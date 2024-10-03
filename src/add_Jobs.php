@@ -35,7 +35,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 <?php
 // Include sidebar
-include("sidebar.php");
+include("navbar.php");
 ?>
 
 <!DOCTYPE html>
@@ -140,5 +140,6 @@ include("sidebar.php");
             </div>
         </form>
     </div>
+    <?php include 'footer.php'; ?>
 </body>
 </html>

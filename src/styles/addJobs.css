@@ -1,4 +1,4 @@
-/* Jobs.css */
+/* Styles for Add Job Form */
 body {
   font-family: Arial, sans-serif;
   background-color: #f4f4f4;
@@ -6,49 +6,116 @@ body {
   padding: 0;
 }
 
-.container {
+.add-job-container {
   max-width: 600px;
   margin: 50px auto;
   background-color: #fff;
   padding: 20px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 
-h1 {
+h2 {
   text-align: center;
   color: #333;
 }
 
-form {
+.add-job-form {
   display: flex;
   flex-direction: column;
 }
 
+.form-group {
+  margin-bottom: 15px;
+}
+
 label {
-  margin-top: 10px;
+  font-weight: bold;
   margin-bottom: 5px;
-  color: #555;
+  display: block;
+  color: #333;
 }
 
-input, textarea {
+input[type="text"],
+input[type="email"],
+input[type="number"],
+textarea {
+  width: 100%;
   padding: 10px;
-  font-size: 16px;
-  border: 1px solid #ddd;
+  border: 1px solid #ccc;
   border-radius: 4px;
+  font-size: 16px;
 }
 
-button {
-  margin-top: 20px;
-  padding: 10px;
-  background-color: #28a745;
+textarea {
+  height: 100px;
+  resize: vertical;
+}
+
+input[type="text"]:focus,
+input[type="email"]:focus,
+input[type="number"]:focus,
+textarea:focus {
+  border-color: #007bff;
+  outline: none;
+}
+
+.btn-submit {
+  background-color: #007bff;
   color: white;
+  padding: 10px;
   border: none;
   border-radius: 4px;
-  cursor: pointer;
   font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
 }
 
-button:hover {
-  background-color: #218838;
+.btn-submit:hover {
+  background-color: #0056b3;
+}
+
+.success-message {
+  background-color: #d4edda;
+  color: #155724;
+  padding: 10px;
+  margin-bottom: 15px;
+  border-left: 5px solid #28a745;
+  border-radius: 4px;
+}
+
+.error-message {
+  color: #d8000c;
+  margin-top: 5px;
+  font-size: 14px;
+}
+
+.error-message-box {
+  background-color: #f8d7da;
+  color: #721c24;
+  padding: 10px;
+  margin-bottom: 15px;
+  border-left: 5px solid #f5c6cb;
+  border-radius: 4px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .add-job-container {
+      margin: 20px;
+      padding: 15px;
+  }
+}
+
+@media (max-width: 480px) {
+  h2 {
+      font-size: 24px;
+  }
+
+  input[type="text"],
+  input[type="email"],
+  input[type="number"],
+  textarea {
+      font-size: 14px;
+  }
 }
