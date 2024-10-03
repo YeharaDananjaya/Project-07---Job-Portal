@@ -295,3 +295,35 @@ a.button2 {
     }
 }
 
+/*Search Function */
+
+/* Search Form Styling */
+.search-form {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.search-form input[type="text"] {
+    width: 300px;
+    padding: 10px;
+    border: 2px solid #ddd;
+    border-radius: 4px;
+    font-size: 16px;
+}
+
+.search-button {
+    padding: 10px 15px;
+    background-color: #28a745;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    border-radius: 4px;
+    margin-left: 10px;
+    font-size: 16px;
+}
+
+.search-button:hover {
+    background-color: #218838;
+}
+

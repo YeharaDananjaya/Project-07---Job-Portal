@@ -5,11 +5,22 @@ session_start();
 // Include your database connection file
 require('db.php');
 
-// Fetch jobs with their associated company names
+// Initialize search query
+$search_query = "";
+if (isset($_GET['search'])) {
+    $search_query = $_GET['search'];
+}
+
+// Fetch jobs with their associated company names, filtered by search query
 $query = "SELECT j.job_id, j.job_title, j.description, j.location, j.salary, c.company_name 
           FROM jobs j 
-          JOIN companies c ON j.company_id = c.company_id";
-$result = $con->query($query);
+          JOIN companies c ON j.company_id = c.company_id 
+          WHERE j.job_title LIKE ? OR c.company_name LIKE ? OR j.location LIKE ?";
+$stmt = $con->prepare($query);
+$search_term = "%" . $search_query . "%";
+$stmt->bind_param("sss", $search_term, $search_term, $search_term);
+$stmt->execute();
+$result = $stmt->get_result();
 ?>
 
 <?php include("sidebar.php"); ?>
@@ -25,6 +36,12 @@ $result = $con->query($query);
 <body>
     <div class="job-container">
         <h2>Available Jobs</h2>
+
+        <!-- Search Form -->
+        <form class="search-form" action="" method="GET">
+            <input type="text" name="search" placeholder="Search by job title, company, or location" value="<?php echo htmlspecialchars($search_query); ?>">
+            <button type="submit" class="search-button">Search</button>
+        </form>
 
         <div class="job-grid">
             <?php if ($result->num_rows > 0): ?>

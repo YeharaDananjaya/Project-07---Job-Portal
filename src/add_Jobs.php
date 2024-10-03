@@ -48,7 +48,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Add Job</title>
-    <link rel="stylesheet" href="styles/addjobs.css">
+    <link rel="stylesheet" href="styles/addJobs.css">
 </head>
 <body>
     <div class="add-job-container">
@@ -87,7 +87,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 </select>
             </div>
             <div class="form-group">
-                <button type="submit">Add Job</button>
+                <button  type="submit">Add Job</button>
             </div>
         </form>
     </div>

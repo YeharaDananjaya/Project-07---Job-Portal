@@ -59,7 +59,7 @@ if (isset($_GET['id'])) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Edit Job</title>
-    <link rel="stylesheet" href="styles/job_view.css">
+    <link rel="stylesheet" href="styles/editJobs.css">
 </head>
 <body>
     <div class="job-container2">
