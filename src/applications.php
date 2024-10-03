@@ -4,15 +4,43 @@ include('db.php');
 // Include navigation bar
 include('navBar.php');
 
+// Start the session
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+
+// Check if the user is logged in and get the email
+if (!isset($_SESSION['email'])) {
+    header("Location: login.php"); // Redirect to login if not logged in
+    exit();
+}
+
+$user_email = $_SESSION['email'];
+
+// Fetch user ID based on the email
+$query = "SELECT id FROM users WHERE email = ?";
+$stmt = mysqli_prepare($con, $query);
+mysqli_stmt_bind_param($stmt, 's', $user_email);
+mysqli_stmt_execute($stmt);
+$result = mysqli_stmt_get_result($stmt);
+$user = mysqli_fetch_assoc($result);
+
+if ($user) {
+    $user_id = $user['id']; // Get the user ID from the fetched result
+} else {
+    header("Location: login.php"); // Redirect if user not found
+    exit();
+}
+
 // Handle deletion if the request method is POST
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Get the application ID from the POST request
     $application_id = $_POST['application_id'];
 
     // Prepare and execute the delete query
-    $query = "DELETE FROM applications WHERE application_id = ?";
+    $query = "DELETE FROM applications WHERE application_id = ? AND user_id = ?";
     $stmt = mysqli_prepare($con, $query);
-    mysqli_stmt_bind_param($stmt, 'i', $application_id);
+    mysqli_stmt_bind_param($stmt, 'ii', $application_id, $user_id);
     mysqli_stmt_execute($stmt);
 
     // Check if the application was deleted
@@ -30,14 +58,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     mysqli_stmt_close($stmt);
 }
 
-// Fetch applications
+// Fetch applications for the logged-in user
 $query = "SELECT a.application_id, a.cover_letter, a.applied_at, a.status, 
                  u.name AS user_name, j.job_title, c.company_name, a.resume_file 
           FROM applications a 
           JOIN users u ON a.user_id = u.id 
           JOIN jobs j ON a.job_id = j.job_id 
-          JOIN companies c ON a.company_id = c.company_id";
-$result = mysqli_query($con, $query);
+          JOIN companies c ON a.company_id = c.company_id
+          WHERE a.user_id = ?"; // Filter by user_id
+$stmt = mysqli_prepare($con, $query);
+mysqli_stmt_bind_param($stmt, 'i', $user_id);
+mysqli_stmt_execute($stmt);
+$result = mysqli_stmt_get_result($stmt);
 ?>
 
 <!DOCTYPE html>

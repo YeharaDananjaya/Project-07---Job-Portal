@@ -1,14 +1,44 @@
-<?php
-// Include database connection
-include('db.php');
-
+<?php 
+// Start the session
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 // Include the navigation bar
 include('navbar.php');
+
+// Include your database connection file
+require('db.php'); // Ensure db.php sets up a MySQLi connection
+
+// Check if the connection is successful
+if ($con->connect_error) {
+    die("Connection failed: " . $con->connect_error);
+}
+
+// Check if the user is logged in
+if (!isset($_SESSION['email'])) {
+    header("Location: login.php"); // Redirect to login if not authenticated
+    exit();
+}
+
+$email = $_SESSION['email'];
+
+// Fetch user information
+$sql = "SELECT * FROM users WHERE email=?";
+$stmt = $con->prepare($sql);
+
+if ($stmt === false) {
+    die("Prepare failed: " . htmlspecialchars($con->error)); // Check if prepare failed
+}
+
+$stmt->bind_param("s", $email);
+$stmt->execute();
+$result = $stmt->get_result();
+$user = $result->fetch_assoc();
 
 // Handle form submission
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Get form data
-    $user_id = 1; // Replace this with the actual user ID
+    $user_id = $user['id']; // Get the user's ID from the fetched data
     $company_id = $_POST['company_id'];
     $job_id = $_POST['job_id'];
     $cover_letter = mysqli_real_escape_string($con, $_POST['cover_letter']);
@@ -200,6 +230,5 @@ mysqli_close($con);
     // Include the footer
     include('footer.php');
     ?>
-
 </body>
 </html>
